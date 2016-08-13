@@ -1,57 +1,29 @@
 <?php
-namespace Garbanzo;
+namespace Garbanzo\Kernel;
 
-use Slim\App as BaseApp;
-use \Slim\Container;
+use Garbanzo\Kernel\Container;
 
 class App {
 
-    private static $app;
+    const PROD = 'prod';
+    const DEV = 'dev';
+    const TEST = 'test';
 
-    private $settings;
-    private $routes;
-    private $depencies;
-    private $middleware;
+    private $environment;
+    private $container;
+    private $configuration;
 
-    public function __construct($settings = array()) {
-        $this->settings = $settings;
-    }
-
-    public static function create($settings = array()) {
-        if (self::$app == null) {
-            self::$app = new static($settings);
-        }
-        return self::$app;
-    }
-
-    public function addRoutes($routes) {
-        $this->routes = $routes;
-
-    }
-
-    public function addDepencies($dependencies) {
-        $this->dependencies = $dependencies;
-    }
-
-    public function addMiddleware($middleware) {
-        $this->middleware = $middleware;
+    public function __construct($environment = self::PROD) {
+        $this->environment = $environment;
+        $this->container = new Container();
+        $this->configuration = new Configuration($this->environment);
     }
 
     public function run() {
-        $container= new Container($this->settings);
-
-
-        foreach ($this->dependencies as $dependencyName => $dependencyValue) {
-            $container[$dependencyName] = $dependencyValue;
-        }
-
-        $app = new BaseApp($container);
-
-        foreach ($this->routes as $route) {
-            $app->{$route[0]}($route[1], $route[2]);
-        }
-
-        $app->run();
+        
     }
 
+    public function getConfiguration() {
+        return $this->configuration;
+    }
 }
