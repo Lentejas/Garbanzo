@@ -1,0 +1,8 @@
+{
+    "test1" : {
+        "prop1" : "VALUE1",
+        "prop4" : "VALUE4"
+    },
+    "test3" : "Val3",
+    "tempered" : "prod"
+}
