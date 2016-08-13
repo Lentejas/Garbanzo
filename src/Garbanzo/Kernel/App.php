@@ -9,21 +9,28 @@ class App {
     const DEV = 'dev';
     const TEST = 'test';
 
-    private $environment;
+    private static $environment;
     private $container;
     private $configuration;
 
     public function __construct($environment = self::PROD) {
-        $this->environment = $environment;
-        $this->container = new Container();
-        $this->configuration = new Configuration($this->environment);
+        self::$environment = $environment;
+        $this->configuration = new Configuration(self::$environment);
+        $this->configuration->loadFile('plugins.json');
+        $loader = new PluginLoader($this->configuration);
+        $this->container = new Container($loader);
+        $this->container->loadPlugin('core');
     }
 
     public function run() {
-        
+        $this->container->getService('default.logger')->crudeLog('running');
     }
 
     public function getConfiguration() {
         return $this->configuration;
+    }
+
+    public static function getEnvironment() {
+        return self::$environment;
     }
 }

@@ -2,6 +2,7 @@
 namespace Garbanzo\Kernel;
 
 use Garbanzo\Kernel\Configuration;
+use Garbanzo\Kernel\App;
 use InvalidArgumentException;
 use Exception;
 use StdClass;
@@ -12,7 +13,8 @@ class PluginLoader {
 
     public function __construct(Configuration $pluginsConfiguration) {
         $this->registeredPlugins = array();
-        $this->register($pluginsConfiguration->getProperties());
+        $plugins = $pluginsConfiguration->getProperties();
+        $this->register($plugins);
     }
 
     public function register($plugins) {
@@ -35,10 +37,11 @@ class PluginLoader {
     }
 
     protected function loadPluginConfiguration($configFilePath) {
-        if (! file_exists(Configuration::ROOT . $configFilePath)) {
+        if (! file_exists(Configuration::$ROOT . $configFilePath)) {
             throw new Exception('The file ' . $configFilePath . ' was not found.');
         }
-        $pluginConfiguration = new Configuration();
+        $pluginConfiguration = new Configuration(App::getEnvironment());
+        $pluginConfiguration->setConfigRootDirectory('/');
         $pluginConfiguration->loadFile($configFilePath);
         $this->checkConfiguration($pluginConfiguration, $configFilePath);
         return $pluginConfiguration;
@@ -49,7 +52,7 @@ class PluginLoader {
         return new $entryPoint();
     }
 
-    protected function checkConfiguration(Configuration $configuration, $fileName) {
+    protected function checkConfiguration(Configuration $pluginConfiguration, $fileName) {
         if ($pluginConfiguration->get('entry_point') === NULL) {
             throw new Exception('No entry point was defined in the config file: ' . $filename);
         }

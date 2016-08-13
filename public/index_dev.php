@@ -13,7 +13,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
-$app = new Garganzo\Kernel\App('dev');
+$app = new Garbanzo\Kernel\App('dev');
 
 // Run app
 $app->run();

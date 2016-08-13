@@ -5,7 +5,7 @@ use Exception;
 use StdClass;
 
 class Configuration {
-    const ROOT = __DIR__ . '/../../..';
+    public static $ROOT ;
     const CONFIG_DIRECTORY = '/config/';
 
     private $config_path;
@@ -13,6 +13,7 @@ class Configuration {
     private $environment;
 
     public function __construct($environment) {
+        self::$ROOT = __DIR__ . '/../../..';
         $this->config_path = NULL;
         $this->environment = $environment;
     }
@@ -65,12 +66,20 @@ class Configuration {
     }
 
     protected function generateFilePath($fileName, $default = false) {
-        $file = self::ROOT . (($this->config_path !== NULL) ? $this->config_path : self::CONFIG_DIRECTORY);
-        $file.= $fileName;
-        if ( (! $default) && $this->environment !== App::PROD) {
-            $file.= '_' . $this->environment;
+        $file = self::$ROOT;
+        if ($this->config_path !== NULL) {
+            if ($this->config_path !== '/') {
+                $file.= $this->config_path;
+            }
+        }else {
+            $file.= self::CONFIG_DIRECTORY;
         }
-        $file.= '.json';
+        if ( (! $default) && $this->environment !== App::PROD) {
+            $fileNameParts = explode('.', $fileName);
+            $file.= $fileNameParts[0] . '_' . $this->environment . '.' . $fileNameParts[1];
+        } else {
+            $file.= $fileName;
+        }
         return $file;
     }
 

@@ -13,7 +13,7 @@ class ConfigurationTest extends TestCase {
      */
     public function itCanLoadADefaultProductionConfigFile() {
         $configuration = new Configuration(App::PROD);
-        $configuration->loadFile('config');
+        $configuration->loadFile('plugins.json');
         $this->assertNotNull($configuration->get('core'));
     }
 
@@ -24,7 +24,7 @@ class ConfigurationTest extends TestCase {
     public function itCanLoadACustomProductionConfigFile() {
         $configuration = new Configuration(App::PROD);
         $configuration->setConfigRootDirectory('/tests/config/');
-        $configuration->loadFile('test');
+        $configuration->loadFile('test.json');
         $expected = new StdClass();
         $expected->prop1 = 'VALUE1';
         $expected->prop4 = 'VALUE4';
@@ -40,7 +40,7 @@ class ConfigurationTest extends TestCase {
     public function itCanGetAMultiPartProperty() {
         $configuration = new Configuration(App::PROD);
         $configuration->setConfigRootDirectory('/tests/config/');
-        $configuration->loadFile('test');
+        $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
     }
 
@@ -51,7 +51,7 @@ class ConfigurationTest extends TestCase {
     public function itCanLoadADevelopmentConfigFile() {
         $configuration = new Configuration(App::DEV);
         $configuration->setConfigRootDirectory('/tests/config/');
-        $configuration->loadFile('test');
+        $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
         $this->assertEquals('Val', $configuration->get('test2'));
@@ -64,7 +64,7 @@ class ConfigurationTest extends TestCase {
     public function itCanConcatADevAndAProductionConfigFile() {
         $configuration = new Configuration(App::DEV);
         $configuration->setConfigRootDirectory('/tests/config/');
-        $configuration->loadFile('test');
+        $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
         $this->assertEquals('VALUE4', $configuration->get('test1.prop4'));
