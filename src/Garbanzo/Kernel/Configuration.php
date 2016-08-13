@@ -5,8 +5,8 @@ use Exception;
 use StdClass;
 
 class Configuration {
-
-    const CONFIG_DIRECTORY = __DIR__ . '/../../../config/';
+    const ROOT = __DIR__ . '/../../..';
+    const CONFIG_DIRECTORY = '/config/';
 
     private $config_path;
     private $properties;
@@ -30,6 +30,9 @@ class Configuration {
             }
         }
         $this->properties = $this->loadData($path);
+        if ($this->properties === NULL) {
+            throw new Exception('The file ' . $path . ' could not be parsed.');
+        }
         if ($this->environment !== App::PROD) {
             $this->addDataFromProd($fileName);
         }
@@ -62,7 +65,7 @@ class Configuration {
     }
 
     protected function generateFilePath($fileName, $default = false) {
-        $file = ($this->config_path !== NULL) ? $this->config_path : self::CONFIG_DIRECTORY;
+        $file = self::ROOT . (($this->config_path !== NULL) ? $this->config_path : self::CONFIG_DIRECTORY);
         $file.= $fileName;
         if ( (! $default) && $this->environment !== App::PROD) {
             $file.= '_' . $this->environment;
@@ -79,6 +82,9 @@ class Configuration {
         $propertyNames = explode('.', $propertyName);
         $property = $this->properties;
         foreach ($propertyNames as $namePart) {
+            if (! property_exists($property, $namePart)) {
+                return NULL;
+            }
             $property = $property->$namePart;
         }
         return $property;

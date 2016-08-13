@@ -7,19 +7,24 @@ use InvalidArgumentException;
 
 class Container {
 
-    private $plugins = array();
+    private $loadedPlugins = array();
     private $middlewares = array();
     private $services = array();
+    private $loader;
 
-    public function getPlugin($name) {
-        if(! array_key_exists($name, $this->plugins)) {
-            throw new Exception('The plugin ' . $name . 'is not registered');
-        }
-        return $this->plugins[$name];
+    public function __construct($loader) {
+        $this->setLoader($loader);
     }
 
-    public function getPlugins() {
-        return $this->plugins;
+    public function setLoader($loader) {
+        $this->loader = $loader;
+    }
+
+    public function getPlugin($name) {
+        if(! array_key_exists($name, $this->loadedPlugins)) {
+            $this->loadedPlugins[$name] = $this->loader->load($name);
+        }
+        return $this->loadedPlugins[$name];
     }
 
     public function getMiddleware($id) {
@@ -46,17 +51,19 @@ class Container {
     }
 
     public function addPlugin(PluginInterface $plugin) {
-        if(array_key_exists($plugin->getName(), $this->plugins)) {
+        throw new Exception('NotImplemented');
+        if(array_key_exists($plugin->getName(), $this->loadedPlugins)) {
             throw new Exception('The plugin ' . $plugin->getName() . 'is already registered');
         }
-        $this->plugins[$plugin->getName()] = $plugin;
+        $this->loadedPlugins[$plugin->getName()] = $plugin;
     }
 
     public function setPlugins($plugins) {
+        throw new Exception('NotImplemented');
         if(! is_array($plugins)) {
             throw new InvalidArgumentException;
         }
-        $this->plugins = array();
+        $this->loadedPlugins = array();
         foreach ($plugins as $plugin) {
             $this->addPlugin($plugin);
         }

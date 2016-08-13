@@ -14,7 +14,7 @@ class ConfigurationTest extends TestCase {
     public function itCanLoadADefaultProductionConfigFile() {
         $configuration = new Configuration(App::PROD);
         $configuration->loadFile('config');
-        $this->assertNotNull($configuration->get('secret'));
+        $this->assertNotNull($configuration->get('core'));
     }
 
     /**
@@ -23,7 +23,7 @@ class ConfigurationTest extends TestCase {
      */
     public function itCanLoadACustomProductionConfigFile() {
         $configuration = new Configuration(App::PROD);
-        $configuration->setConfigRootDirectory(__DIR__ . '/../../config/');
+        $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test');
         $expected = new StdClass();
         $expected->prop1 = 'VALUE1';
@@ -39,7 +39,7 @@ class ConfigurationTest extends TestCase {
      */
     public function itCanGetAMultiPartProperty() {
         $configuration = new Configuration(App::PROD);
-        $configuration->setConfigRootDirectory(__DIR__ . '/../../config/');
+        $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
     }
@@ -50,7 +50,7 @@ class ConfigurationTest extends TestCase {
      */
     public function itCanLoadADevelopmentConfigFile() {
         $configuration = new Configuration(App::DEV);
-        $configuration->setConfigRootDirectory(__DIR__ . '/../../config/');
+        $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
@@ -63,7 +63,7 @@ class ConfigurationTest extends TestCase {
      */
     public function itCanConcatADevAndAProductionConfigFile() {
         $configuration = new Configuration(App::DEV);
-        $configuration->setConfigRootDirectory(__DIR__ . '/../../config/');
+        $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
