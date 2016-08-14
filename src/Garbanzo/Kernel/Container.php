@@ -2,10 +2,11 @@
 namespace Garbanzo\Kernel;
 
 use Garbanzo\Kernel\Interfaces\PluginInterface;
+use Garbanzo\Kernel\Interfaces\ContainerInterface;
 use Exception;
 use InvalidArgumentException;
 
-class Container {
+class Container implements ContainerInterface{
 
     private $loadedPlugins = array();
     private $middlewares = array();
@@ -47,11 +48,20 @@ class Container {
         return $this->middlewares;
     }
 
-    public function getService($name) {//TODO Lazy loading
+    public function get($name) {
+        return $this->getService($name);
+    }
+
+    public function getService($name) {
         if(! array_key_exists($name, $this->services)) {
             throw new Exception('The service ' . $name . ' is not registered');
         }
-        return $this->services[$name];
+        if ($this->services[$name]['object'] === NULL) {
+            $this->services[$name]['object'] = new $this->services[$name]['class']($this);
+        } else if (is_callable($this->services[$name]['object'])) {
+            return $this->services[$name]['object']();
+        }
+        return $this->services[$name]['object'];
     }
 
     public function getServices() {
@@ -99,10 +109,20 @@ class Container {
             throw new InvalidArgumentException;
         } else if (array_key_exists($name, $this->services)) {
             throw new Exception('The service ' . $name . 'is already registered');
-        } else if (! is_object($service)) {
-            throw new InvalidArgumentException;
+        } else if (is_object($service)) {
+            $this->services[$name] = array(
+
+                'object' => $service,
+                'class' => get_class($service),
+            );
+            return;
+        } else if (! class_exists($service)) {
+            throw new InvalidArgumentException('The provided class (' . $service . ') does not exist');
         }
-        $this->services[$name] = $service;
+        $this->services[$name] = array(
+            'class' => $service,
+            'object' => NULL
+        );
     }
 
     public function setServices($services) {
