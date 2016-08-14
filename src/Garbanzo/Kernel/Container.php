@@ -57,6 +57,8 @@ class Container implements ContainerInterface{
             throw new Exception('The service ' . $name . ' is not registered');
         }
         if ($this->services[$name]['object'] === NULL) {
+            $nameParts = explode('.', $name);
+            $plugin = $this->loadedPlugins[$nameParts[0]];
             $this->services[$name]['object'] = new $this->services[$name]['class']();
             $this->services[$name]['object']->setContainer($this);
         } else if (is_callable($this->services[$name]['object'])) {
