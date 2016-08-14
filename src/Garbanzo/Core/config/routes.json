@@ -17,5 +17,11 @@
             "lang": "fr|en",
             "slug": "[a-z0-9-]+"
         }
+    },
+    "page": {
+        "pattern": "/:lol/page/:foo",
+        "controller": "MainController",
+        "http_method": "GET",
+        "controller_method": "page"
     }
 }
