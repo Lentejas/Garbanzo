@@ -1,3 +1,4 @@
 {
-    "core": "/src/Garbanzo/Core/config.json"
+    "core": "/src/Garbanzo/Core/config.json",
+    "garbanzo-cms": "/vendor/lentejas/garbanzo-cms/config.json"
 }
