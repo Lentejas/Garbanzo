@@ -49,7 +49,7 @@ class PluginLoader {
 
     protected function instantiatePlugin(Configuration $pluginConfiguration) {
         $entryPoint = $pluginConfiguration->get('entry_point');
-        return new $entryPoint();
+        return new $entryPoint($pluginConfiguration->get('name'), $pluginConfiguration->get('configuration'));
     }
 
     protected function checkConfiguration(Configuration $pluginConfiguration, $fileName) {

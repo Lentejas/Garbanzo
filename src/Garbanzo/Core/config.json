@@ -2,8 +2,9 @@
     "name": "garbanzo-core",
     "description": "The very needed core features for any app. (Could (maybe should) be overwritten)",
     "version": "0.0.0a",
-    "entry_point": "Garbanzo\\Core\\PluginEntry",
+    "entry_point": "Garbanzo\\Core\\CorePlugin",
+    "configuration": "/config/config.json", 
     "authors": {
         "organisation": "Lentejas"
-    },
+    }
 }

@@ -24,10 +24,12 @@ class Container {
         if(! array_key_exists($name, $this->loadedPlugins)) {
             $this->loadedPlugins[$name] = $this->loader->load($name);
             $this->loadedPlugins[$name]->setContainer($this);
+            $this->loadedPlugins[$name]->create();
             $this->loadedPlugins[$name]->loadDependencies();
             $services = $this->loadedPlugins[$name]->getDefinedServices();
+            $namespace = $this->loadedPlugins[$name]->getServicesNamespace();
             foreach ($services as $nameService => $service) {
-                $this->addService($nameService, $service);
+                $this->addService($namespace . '.' . $nameService, $service);
             }
         }
         return $this->loadedPlugins[$name];

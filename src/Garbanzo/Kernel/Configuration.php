@@ -5,15 +5,19 @@ use Exception;
 use StdClass;
 
 class Configuration {
-    public static $ROOT ;
+    public static $ROOT = NULL;
     const CONFIG_DIRECTORY = '/config/';
 
     private $config_path;
     private $properties;
     private $environment;
 
-    public function __construct($environment) {
-        self::$ROOT = __DIR__ . '/../../..';
+    public function __construct($environment, $serverRootPath = NULL) {
+        if (self::$ROOT === NULL && $serverRootPath === NULL) {
+            throw new BadMethodCallException('The server root path must be defined at least once.');
+        } elseif ($serverRootPath !== NULL) {
+            self::$ROOT = $serverRootPath;
+        }
         $this->config_path = NULL;
         $this->environment = $environment;
     }
@@ -50,7 +54,6 @@ class Configuration {
         }
         $newProperties = $this->loadData($path);
         $this->properties = $this->getDataToConcat($this->properties, $newProperties);
-        //$this->concatData($dataToAdd);
     }
 
     protected function getDataToConcat($oldProperties, $newProperties) {

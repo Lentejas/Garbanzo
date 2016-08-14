@@ -12,7 +12,7 @@ class ConfigurationTest extends TestCase {
      * @test
      */
     public function itCanLoadADefaultProductionConfigFile() {
-        $configuration = new Configuration(App::PROD);
+        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
         $configuration->loadFile('plugins.json');
         $this->assertNotNull($configuration->get('core'));
     }
@@ -22,7 +22,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadADefaultProductionConfigFile
      */
     public function itCanLoadACustomProductionConfigFile() {
-        $configuration = new Configuration(App::PROD);
+        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $expected = new StdClass();
@@ -38,7 +38,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadADefaultProductionConfigFile
      */
     public function itCanGetAMultiPartProperty() {
-        $configuration = new Configuration(App::PROD);
+        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
@@ -49,7 +49,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanLoadADevelopmentConfigFile() {
-        $configuration = new Configuration(App::DEV);
+        $configuration = new Configuration(App::DEV, __DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
@@ -62,7 +62,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanConcatADevAndAProductionConfigFile() {
-        $configuration = new Configuration(App::DEV);
+        $configuration = new Configuration(App::DEV, __DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
