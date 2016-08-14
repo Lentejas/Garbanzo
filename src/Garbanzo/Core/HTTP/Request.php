@@ -20,7 +20,7 @@ class Request implements ServerRequestInterface{
         $this->cookieParams = $_COOKIE;
     }
 
-    protected function cloneMethod() {
+    protected function copy() {
         $request = new Request($this->uri);
         $request->attributes = $this->attributes;
         $request->uri = $this->uri;
@@ -48,7 +48,7 @@ class Request implements ServerRequestInterface{
      * @inheritDoc
      */
     public function withCookieParams(array $cookies) {
-        $request = $this->cloneMethod();
+        $request = $this->copy();
         $request->cookieParams= $cookies;
         return $request;
     }
@@ -83,7 +83,7 @@ class Request implements ServerRequestInterface{
      * @return static
      */
     public function withQueryParams(array $query) {
-        $request = $this->cloneMethod();
+        $request = $this->copy();
         $request->queryParams= $query;
         return $request;
     }
@@ -223,7 +223,7 @@ class Request implements ServerRequestInterface{
      * @return static
      */
     public function withAttribute($name, $value) {
-        $request = $this->cloneMethod();
+        $request = $this->copy();
         $request->attributes[$name] = $value;
         return $request;
     }
@@ -243,7 +243,7 @@ class Request implements ServerRequestInterface{
      * @return static
      */
     public function withoutAttribute($name) {
-        $request = $this->cloneMethod();
+        $request = $this->copy();
         if (! array_key_exists($name, $this->attributes)) {
             unset($request->attributes[$name]);
         }
@@ -297,7 +297,7 @@ class Request implements ServerRequestInterface{
      * @return string Returns the request method.
      */
     public function getMethod() {
-
+        return $this->serverParams['REQUEST_METHOD'];
     }
 
     /**
