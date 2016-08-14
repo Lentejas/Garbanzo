@@ -47,7 +47,7 @@ class Container {
         return $this->middlewares;
     }
 
-    public function getService($name) {
+    public function getService($name) {//TODO Lazy loading
         if(! array_key_exists($name, $this->services)) {
             throw new Exception('The service ' . $name . ' is not registered');
         }
