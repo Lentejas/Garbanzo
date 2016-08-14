@@ -26,13 +26,15 @@ class App {
     public function run() {
         $request = $this->container->get('garbanzo-core.http')->getRequest();
         $this->container->get('garbanzo-core.logger')->crudeLog('running');
-        $routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
+        /*$routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $routes->loadFile('routes.json');
         foreach ($routes->getProperties() as $route) {
             $this->container->get('garbanzo-core.router')->addRoute($route);
-        }
+        }*/
         $this->container->loadPlugin('garbanzo-cms');
         $this->container->loadPlugin('db');
+        $this->container->loadPlugin('theme');
+        $this->container->get('theme.theme')->getLayout();
         //$route = $this->container->get('garbanzo-core.router')->route($request);
         //var_dump($route);
     }
