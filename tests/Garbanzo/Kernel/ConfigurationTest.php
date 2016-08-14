@@ -12,7 +12,7 @@ class ConfigurationTest extends TestCase {
      * @test
      */
     public function itCanLoadADefaultProductionConfigFile() {
-        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
+        $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->loadFile('plugins.json');
         $this->assertNotNull($configuration->get('core'));
     }
@@ -22,7 +22,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadADefaultProductionConfigFile
      */
     public function itCanLoadACustomProductionConfigFile() {
-        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
+        $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $expected = new StdClass();
@@ -38,7 +38,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadADefaultProductionConfigFile
      */
     public function itCanGetAMultiPartProperty() {
-        $configuration = new Configuration(App::PROD, __DIR__ . '/../../..');
+        $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
@@ -49,9 +49,11 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanLoadADevelopmentConfigFile() {
-        $configuration = new Configuration(App::DEV, __DIR__ . '/../../..');
+        new App(App::DEV);
+        $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
+        var_dump($configuration->getProperties());
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
         $this->assertEquals('Val', $configuration->get('test2'));
@@ -62,7 +64,8 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanConcatADevAndAProductionConfigFile() {
-        $configuration = new Configuration(App::DEV, __DIR__ . '/../../..');
+        new App(App::DEV);
+        $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));

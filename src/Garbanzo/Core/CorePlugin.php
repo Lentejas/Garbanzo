@@ -28,7 +28,8 @@ class CorePlugin implements PluginInterface {
     }
 
     public function create() {
-        $this->configuration = new JsonConfig($this->container);
+        $this->configuration = new JsonConfig();
+        $this->configuration->setContainer($this->container);
         $this->configuration->setConfigRootDirectory('/src/Garbanzo/Core');
         $this->configuration->loadFile($this->mainConfigFileName);
     }

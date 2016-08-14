@@ -1,13 +1,9 @@
 <?php
 namespace Garbanzo\Core\Services;
 
-use Garbanzo\Kernel\Interfaces\ContainerInterface;
+use Garbanzo\Kernel\Traits\ServiceCreation;
 
 class Router {
 
-    protected $container;
-
-    public function __construct(ContainerInterface $container) {
-        $this->container = $container;
-    }
+    use ServiceCreation;
 }

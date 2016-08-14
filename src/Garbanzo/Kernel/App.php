@@ -15,7 +15,7 @@ class App {
 
     public function __construct($environment = self::PROD) {
         self::$environment = $environment;
-        $this->configuration = new Configuration(self::$environment, $_SERVER['DOCUMENT_ROOT'] . '/..');
+        $this->configuration = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $this->configuration->loadFile('plugins.json');
         $loader = new PluginLoader($this->configuration);
         $this->container = new Container($loader);

@@ -1,6 +1,8 @@
 <?php
 namespace Garbanzo\Kernel;
 
+use BadMethodCallException;
+use InvalidArgumentException;
 use Exception;
 use StdClass;
 
@@ -10,16 +12,26 @@ class Configuration {
 
     private $config_path;
     private $properties;
-    private $environment;
 
-    public function __construct($environment, $serverRootPath = NULL) {
+    public function __construct($serverRootPath = NULL) {
         if (self::$ROOT === NULL && $serverRootPath === NULL) {
             throw new BadMethodCallException('The server root path must be defined at least once.');
+        } elseif (! $this->isCorrectPath($serverRootPath)) {
+            throw new InvalidArgumentException('The path provided is not a correct path.');
         } elseif ($serverRootPath !== NULL) {
             self::$ROOT = $serverRootPath;
         }
         $this->config_path = NULL;
-        $this->environment = $environment;
+    }
+
+    public function isCorrectPath($path) {
+        if ($path === NULL) {
+            return true;
+        }
+        if (! is_string($path)) {
+            return false;
+        }
+        return true;
     }
 
     public function setConfigRootDirectory($path) {
@@ -38,7 +50,7 @@ class Configuration {
         if ($this->properties === NULL) {
             throw new Exception('The file ' . $path . ' could not be parsed.');
         }
-        if ($this->environment !== App::PROD) {
+        if (App::getEnvironment() !== App::PROD) {
             $this->addDataFromProd($fileName);
         }
     }
@@ -77,9 +89,9 @@ class Configuration {
         }else {
             $file.= self::CONFIG_DIRECTORY;
         }
-        if ( (! $default) && $this->environment !== App::PROD) {
+        if ( (! $default) && App::getEnvironment() !== App::PROD) {
             $fileNameParts = explode('.', $fileName);
-            $file.= $fileNameParts[0] . '_' . $this->environment . '.' . $fileNameParts[1];
+            $file.= $fileNameParts[0] . '_' . App::getEnvironment() . '.' . $fileNameParts[1];
         } else {
             $file.= $fileName;
         }
