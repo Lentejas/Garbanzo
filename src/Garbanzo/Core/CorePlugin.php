@@ -1,7 +1,7 @@
 <?php
 namespace Garbanzo\Core;
 
-use Garbanzo\Kernel\Interfaces\PluginInterface;
+use Garbanzo\Kernel\Definition\Plugin;
 use Garbanzo\Kernel\Interfaces\ContainerInterface;
 use Garbanzo\Kernel\Configuration;
 use Garbanzo\Kernel\App;
@@ -11,7 +11,7 @@ use Garbanzo\Core\Services\HTTPHandler;
 use Garbanzo\Core\Services\Security;
 use Garbanzo\Core\Services\JsonConfig;
 
-class CorePlugin implements PluginInterface {
+class CorePlugin extends Plugin {
 
     protected $container;
     protected $configuration;
