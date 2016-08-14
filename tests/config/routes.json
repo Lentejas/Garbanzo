@@ -1,10 +1,4 @@
 {
-    "home": {
-        "pattern": "/",
-        "controller": "MainController",
-        "http_method": "GET|POST",
-        "controller_method": "home"
-    },
     "pageview": {
         "pattern": "/:lang/page/:slug",
         "controller": "MainController",
@@ -28,5 +22,11 @@
         "controller": "MainController",
         "http_method": "POST",
         "controller_method": "page"
+    },
+    "home": {
+        "pattern": "/",
+        "controller": "MainController",
+        "http_method": "GET|POST",
+        "controller_method": "home"
     }
 }
