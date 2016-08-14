@@ -60,6 +60,7 @@ class Container implements ContainerInterface{
             $nameParts = explode('.', $name);
             $plugin = $this->loadedPlugins[$nameParts[0]];
             $this->services[$name]['object'] = new $this->services[$name]['class']();
+            $this->services[$name]['object']->setPlugin($plugin);
             $this->services[$name]['object']->setContainer($this);
         } else if (is_callable($this->services[$name]['object'])) {
             return $this->services[$name]['object']();

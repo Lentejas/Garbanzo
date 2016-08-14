@@ -20,12 +20,11 @@ class App {
         $this->configuration->loadFile('plugins.json');
         $loader = new PluginLoader($this->configuration);
         $this->container = new Container($loader);
-        $this->container->loadPlugin('core');
+        $this->container->loadPlugin('garbanzo-core');
     }
 
     public function run() {
         $request = $this->container->get('garbanzo-core.http')->getRequest();
-        $this->container->get('garbanzo-core.logger')->crudeLog('running');
         /*$routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $routes->loadFile('routes.json');
         foreach ($routes->getProperties() as $route) {
@@ -34,7 +33,7 @@ class App {
         $this->container->loadPlugin('garbanzo-cms');
         $this->container->loadPlugin('db');
         $this->container->loadPlugin('theme');
-        $this->container->get('theme.theme')->getLayout();
+        echo $this->container->get('theme.theme')->getLayout();
         //$route = $this->container->get('garbanzo-core.router')->route($request);
         //var_dump($route);
     }
