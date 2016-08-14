@@ -28,11 +28,11 @@ class App {
         $this->container->get('garbanzo-core.logger')->crudeLog('running');
         $routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $routes->loadFile('routes.json');
-        echo "<pre>";
         foreach ($routes->getProperties() as $route) {
             $this->container->get('garbanzo-core.router')->addRoute($route);
         }
-        $this->container->get('garbanzo-core.router')->route("/");
+        $route = $this->container->get('garbanzo-core.router')->route($request);
+        var_dump($route);
     }
 
     public function getConfiguration() {
