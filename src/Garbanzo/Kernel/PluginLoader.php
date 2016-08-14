@@ -37,9 +37,6 @@ class PluginLoader {
     }
 
     protected function loadPluginConfiguration($configFilePath) {
-        if (! file_exists(Configuration::$ROOT . $configFilePath)) {
-            throw new Exception('The file ' . $configFilePath . ' was not found.');
-        }
         $pluginConfiguration = new Configuration();
         $pluginConfiguration->setConfigRootDirectory('/');
         $pluginConfiguration->loadFile($configFilePath);

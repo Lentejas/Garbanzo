@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": ">=5.5.0|7.0.*",
-        "monolog/monolog": "^1.17"
+        "monolog/monolog": "^1.17",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.4"

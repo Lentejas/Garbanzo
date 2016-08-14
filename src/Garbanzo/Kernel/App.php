@@ -2,6 +2,7 @@
 namespace Garbanzo\Kernel;
 
 use Garbanzo\Kernel\Container;
+use InvalidArgumentException;
 
 class App {
 
@@ -23,6 +24,7 @@ class App {
     }
 
     public function run() {
+        $request = $this->container->get('garbanzo-core.http')->getRequest();
         $this->container->get('garbanzo-core.logger')->crudeLog('running');
     }
 
@@ -32,5 +34,14 @@ class App {
 
     public static function getEnvironment() {
         return self::$environment;
+    }
+
+    public static function setEnvironment($environment) {
+        if (($environment !== self::PROD)
+            && ($environment !== self::DEV)
+            && ($environment !== self::TEST)) {
+            throw new InvalidArgumentException;
+        }
+        self::$environment = $environment;
     }
 }

@@ -49,11 +49,10 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanLoadADevelopmentConfigFile() {
-        new App(App::DEV);
+        App::setEnvironment(App::DEV);
         $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
-        var_dump($configuration->getProperties());
         $this->assertEquals('VALUE1', $configuration->get('test1.prop1'));
         $this->assertEquals('VALUE2', $configuration->get('test1.prop2'));
         $this->assertEquals('Val', $configuration->get('test2'));
@@ -64,7 +63,7 @@ class ConfigurationTest extends TestCase {
      * @depends itCanLoadACustomProductionConfigFile
      */
     public function itCanConcatADevAndAProductionConfigFile() {
-        new App(App::DEV);
+        App::setEnvironment(App::DEV);
         $configuration = new Configuration(__DIR__ . '/../../..');
         $configuration->setConfigRootDirectory('/tests/config/');
         $configuration->loadFile('test.json');
