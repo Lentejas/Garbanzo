@@ -40,7 +40,7 @@ class PluginLoader {
         if (! file_exists(Configuration::$ROOT . $configFilePath)) {
             throw new Exception('The file ' . $configFilePath . ' was not found.');
         }
-        $pluginConfiguration = new Configuration(App::getEnvironment());
+        $pluginConfiguration = new Configuration();
         $pluginConfiguration->setConfigRootDirectory('/');
         $pluginConfiguration->loadFile($configFilePath);
         $this->checkConfiguration($pluginConfiguration, $configFilePath);

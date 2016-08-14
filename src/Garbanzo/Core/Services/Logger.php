@@ -1,17 +1,14 @@
 <?php
 namespace Garbanzo\Core\Services;
 
-use Garbanzo\Kernel\Interfaces\ContainerInterface;
+use Garbanzo\Kernel\Traits\ServiceCreation;
 
 class Logger {
 
-    protected $container;
-
-    public function __construct(ContainerInterface $container) {
-        $this->container = $container;
-    }
+    use ServiceCreation;
 
     public function crudeLog($message) {
         echo $message . "\n";
     }
+
 }

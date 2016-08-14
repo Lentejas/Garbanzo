@@ -15,7 +15,7 @@ class App {
 
     public function __construct($environment = self::PROD) {
         self::$environment = $environment;
-        $this->configuration = new Configuration(self::$environment, $_SERVER['DOCUMENT_ROOT'] . '/..');
+        $this->configuration = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $this->configuration->loadFile('plugins.json');
         $loader = new PluginLoader($this->configuration);
         $this->container = new Container($loader);
@@ -24,7 +24,7 @@ class App {
 
     public function run() {
         $this->container->get('garbanzo-core.logger')->crudeLog('running');
-        $routes = new Configuration(self::$environment, $_SERVER['DOCUMENT_ROOT'] . '/..');
+        $routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
         $routes->loadFile('routes.json');
         echo "<pre>";
         foreach ($routes->getProperties() as $route) {

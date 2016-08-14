@@ -1,18 +1,15 @@
 <?php
 namespace Garbanzo\Core\Services;
 
-use Garbanzo\Kernel\Interfaces\ContainerInterface;
+use Garbanzo\Kernel\Traits\ServiceCreation;
 use Garbanzo\Kernel\App;
 use Garbanzo\Kernel\Configuration;
 
 class Router {
 
-    protected $container;
-    private $routes = array();
+    use ServiceCreation;
 
-    public function __construct(ContainerInterface $container) {
-        $this->container = $container;
-    }
+    private $routes = array();
 
     public function addRoute($routeConfig) {
         $prefix = $routeConfig->prefix;
@@ -27,7 +24,7 @@ class Router {
         if (! file_exists(Configuration::$ROOT . $configFilePath)) {
             throw new Exception('The file ' . $configFilePath . ' was not found.');
         }
-        $routeConfiguration = new Configuration(App::getEnvironment());
+        $routeConfiguration = new Configuration();
         $routeConfiguration->setConfigRootDirectory('/');
         $routeConfiguration->loadFile($configFilePath);
         return $routeConfiguration;
