@@ -4,6 +4,7 @@ namespace Garbanzo\Core\Services;
 use Garbanzo\Kernel\Traits\ServiceCreation;
 use Garbanzo\Kernel\App;
 use Garbanzo\Kernel\Configuration;
+use Exception;
 
 class Router {
 
@@ -24,10 +25,28 @@ class Router {
         $routeConfiguration = new Configuration();
         $routeConfiguration->setConfigRootDirectory('/');
         $routeConfiguration->loadFile($configFilePath);
+        $this->validateRouteFile($routeConfiguration);
         return $routeConfiguration;
     }
 
+    protected function validateRouteFile(Configuration $config) {
+        if (property_exists($config,"pattern")){
+            throw new Exception("Error route file, must specify pattern");
+        }
+        if (property_exists($config,"controller_method")){
+            throw new Exception("Error route file, must specify controller_method");
+        }
+        if (property_exists($config,"controller")){
+            throw new Exception("Error route file, must specify controller");
+        }
+    }
+
     protected function computeRoute($route, $config, $prefix) {
+        if (property_exists($config,"http_method")) {
+            $method = strtoupper($config->http_method);
+        } else {
+            $method = "GET";
+        }
         $default = (property_exists($config,'default')) ? $config->default : null;
         $requirements = (property_exists($config,'requirements')) ? $config->requirements : null;
         $r = array();
@@ -42,7 +61,10 @@ class Router {
             $config->pattern = preg_replace('#:'.$param.'/?#', $this->getFormattedParameter($param, $param === $params[1][count($params[1]) - 1],$requirements, $default), $config->pattern);
         }
         $r['regex'] .= $config->pattern;
-        $this->routes[$route] = $r;
+        $methods = explode("|",$method);
+        foreach ($methods as $method){
+            $this->routes[$method][$route] = $r;
+        }
     }
 
     protected function getFormattedParameter($parameterName, $isLastParameter, $requirements = null, $default = null){
@@ -71,6 +93,6 @@ class Router {
     }
 
     public function route($url) {
-
+        
     }
 }

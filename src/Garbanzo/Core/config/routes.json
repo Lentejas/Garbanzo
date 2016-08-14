@@ -2,13 +2,12 @@
     "home": {
         "pattern": "/",
         "controller": "MainController",
-        "http_method": "GET",
+        "http_method": "GET|POST",
         "controller_method": "home"
     },
     "pageview": {
         "pattern": "/:lang/page/:slug",
         "controller": "MainController",
-        "http_method": "GET",
         "controller_method": "pageview",
         "default": {
             "lang": "fr"
@@ -22,6 +21,12 @@
         "pattern": "/:lol/page/:foo",
         "controller": "MainController",
         "http_method": "GET",
+        "controller_method": "page"
+    },
+    "page1": {
+        "pattern": "/:lol/page/:foo",
+        "controller": "MainController",
+        "http_method": "POST",
         "controller_method": "page"
     }
 }

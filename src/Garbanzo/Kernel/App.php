@@ -30,6 +30,7 @@ class App {
         foreach ($routes->getProperties() as $route) {
             $this->container->get('garbanzo-core.router')->addRoute($route);
         }
+        $this->container->get('garbanzo-core.router')->route("/");
     }
 
     public function getConfiguration() {
