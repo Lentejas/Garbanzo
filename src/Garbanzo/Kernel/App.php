@@ -24,6 +24,12 @@ class App {
 
     public function run() {
         $this->container->get('garbanzo-core.logger')->crudeLog('running');
+        $routes = new Configuration(self::$environment, $_SERVER['DOCUMENT_ROOT'] . '/..');
+        $routes->loadFile('routes.json');
+        echo "<pre>";
+        foreach ($routes->getProperties() as $route) {
+            $this->container->get('garbanzo-core.router')->addRoute($route);
+        }
     }
 
     public function getConfiguration() {
