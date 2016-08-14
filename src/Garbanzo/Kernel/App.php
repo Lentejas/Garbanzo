@@ -23,7 +23,7 @@ class App {
     }
 
     public function run() {
-        $this->container->getService('garbanzo-core.logger')->crudeLog('running');
+        $this->container->get('garbanzo-core.logger')->crudeLog('running');
     }
 
     public function getConfiguration() {

@@ -1,12 +1,12 @@
 <?php
 namespace Garbanzo\Kernel\Interfaces;
 
-use Garbanzo\Kernel\Container;
+use Garbanzo\Kernel\Interfaces\ContainerInterface;
 
 interface PluginInterface {
     public function __construct($name, $mainConfigFileName);
 
-    public function setContainer(Container $container);
+    public function setContainer(ContainerInterface $container);
 
     public function getDefinedServices();
 

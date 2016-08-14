@@ -52,7 +52,7 @@ class ContainerTest extends TestCase {
         $services = $container->getServices();
         $this->assertCount(1, $services);
         $this->assertArrayHasKey($name, $services);
-        $this->assertEquals($returnValue, $services[$name]());
+        $this->assertEquals($returnValue, $container->get($name));
     }
 
     /**

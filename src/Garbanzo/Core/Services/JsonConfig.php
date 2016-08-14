@@ -1,12 +1,14 @@
 <?php
 namespace Garbanzo\Core\Services;
 
+use Garbanzo\Kernel\Interfaces\ContainerInterface;
 use Garbanzo\Kernel\Configuration;
 
 class JsonConfig extends Configuration{
 
-    public function __construct() {
-        
-    }
+    protected $container;
 
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
 }

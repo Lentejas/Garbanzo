@@ -2,7 +2,7 @@
 namespace Garbanzo\Core;
 
 use Garbanzo\Kernel\Interfaces\PluginInterface;
-use Garbanzo\Kernel\Container;
+use Garbanzo\Kernel\Interfaces\ContainerInterface;
 use Garbanzo\Kernel\Configuration;
 use Garbanzo\Kernel\App;
 use Garbanzo\Core\Services\Logger;
@@ -23,23 +23,23 @@ class CorePlugin implements PluginInterface {
         $this->namespace = $name;
     }
 
-    public function setContainer(Container $container) {
+    public function setContainer(ContainerInterface $container) {
         $this->container = $container;
     }
 
     public function create() {
-        $this->configuration = new JsonConfig();
+        $this->configuration = new JsonConfig($this->container);
         $this->configuration->setConfigRootDirectory('/src/Garbanzo/Core');
         $this->configuration->loadFile($this->mainConfigFileName);
     }
 
     public function getDefinedServices() {
         return array(
-            'logger' => new Logger(),
-            'http' => new HTTPHandler(),
-            'config.json' => new JsonConfig(),
-            'router' => new Router(),
-            'security' => new Security(),
+            'logger' => Logger::class,
+            'http' => HTTPHandler::class,
+            'config.json' => $this->configuration,
+            'router' => Router::class,
+            'security' => Security::class,
         );
     }
 
