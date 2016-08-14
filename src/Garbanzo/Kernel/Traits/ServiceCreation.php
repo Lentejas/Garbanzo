@@ -9,4 +9,5 @@ trait ServiceCreation {
     public function setContainer(ContainerInterface $container) {
         $this->container = $container;
     }
+
 }
