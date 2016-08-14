@@ -1,0 +1,21 @@
+{
+    "home": {
+        "pattern": "/",
+        "controller": "MainController",
+        "http_method": "GET",
+        "controller_method": "home"
+    },
+    "pageview": {
+        "pattern": "/:lang/page/:slug",
+        "controller": "MainController",
+        "http_method": "GET",
+        "controller_method": "pageview",
+        "default": {
+            "lang": "fr"
+        },
+        "requirements": {
+            "lang": "fr|en",
+            "slug": "[a-z0-9-]+"
+        }
+    }
+}
