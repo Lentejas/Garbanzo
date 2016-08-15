@@ -7,99 +7,35 @@ use Exception;
 use StdClass;
 
 class Configuration {
-    public static $ROOT = NULL;
-    const CONFIG_DIRECTORY = '/config/';
 
-    private $config_path;
     private $properties;
+    protected $manager;
+    protected $basePath;
+    protected $fileName;
 
-    public function __construct($serverRootPath = NULL) {
-        if (self::$ROOT === NULL && $serverRootPath === NULL) {
-            throw new BadMethodCallException('The server root path must be defined at least once.');
-        } elseif (! $this->isCorrectPath($serverRootPath)) {
-            throw new InvalidArgumentException('The path provided is not a correct path.');
-        } elseif ($serverRootPath !== NULL) {
-            self::$ROOT = $serverRootPath;
-        }
-        $this->config_path = NULL;
+    public function __construct($manager, $basePath, $filename = null) {
+        $this->manager = $manager;
+        $this->basePath = $basePath;
+        $this->filename = $filename;
     }
 
-    public function isCorrectPath($path) {
-        if ($path === NULL) {
-            return true;
-        }
-        if (! is_string($path)) {
-            return false;
-        }
-        return true;
-    }
-
-    public function setConfigRootDirectory($path) {
-        $this->config_path = $path;
-    }
-
-    public function loadFile($fileName) {
-        $path = $this->generateFilePath($fileName);
-        if (! file_exists($path)) {
-            $path = $this->generateFilePath($fileName, true);
-            if (! file_exists($path)) {
-                throw new Exception('File not found :' . $path);
-            }
-        }
-        $this->properties = $this->loadData($path);
-        if ($this->properties === NULL) {
-            throw new Exception('The file ' . $path . ' could not be parsed.');
-        }
-        if (App::getEnvironment() !== App::PROD) {
-            $this->addDataFromProd($fileName);
-        }
-    }
-
-    protected function loadData($path) {
-        return json_decode(file_get_contents($path));
-    }
-
-    protected function addDataFromProd($fileName) {
-        $path = $this->generateFilePath($fileName, true);
-        if (! file_exists($path)) {
-            throw new Exception('File not found: config file ' . $path . '.json for production.');
-        }
-        $newProperties = $this->loadData($path);
-        $this->properties = $this->getDataToConcat($this->properties, $newProperties);
-    }
-
-    protected function getDataToConcat($oldProperties, $newProperties) {
-        $property = $oldProperties;
-        foreach (get_object_vars($newProperties) as $name => $newProperty) {
-            if (! property_exists($oldProperties, $name)) {
-                $property->$name = $newProperty;
-            } elseif (is_object($newProperty)) {
-                $property->$name = $this->getDataToConcat($oldProperties->$name, $newProperty);
-            }
-        }
-        return $property;
-    }
-
-    protected function generateFilePath($fileName, $default = false) {
-        $file = self::$ROOT;
-        if ($this->config_path !== NULL) {
-            if ($this->config_path !== '/') {
-                $file.= $this->config_path;
-            }
-        }else {
-            $file.= self::CONFIG_DIRECTORY;
-        }
-        if ( (! $default) && App::getEnvironment() !== App::PROD) {
-            $fileNameParts = explode('.', $fileName);
-            $file.= $fileNameParts[0] . '_' . App::getEnvironment() . '.' . $fileNameParts[1];
+    public function getConfiguration($fileName, $basePath =null) {
+        if ($this->filename  === null || ($this->filename != $filename 
+            || ($this->basePath != $basePath && $basePath !== null))) {
+            $this->properties = $this->manager->getConfigurationData($basePath, $fileName);
+            $this->filename = $fileName;
         } else {
-            $file.= $fileName;
+            return $this->manager->getConfigurationFile($basePath, $fileName);
         }
-        return $file;
+        return $this;
     }
 
     public function getProperties() {
         return $this->properties;
+    }
+
+    public function setProperties($properties) {
+        $this->properties = $properties;
     }
 
     public function get($propertyName) {

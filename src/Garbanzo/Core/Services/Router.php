@@ -14,6 +14,12 @@ class Router {
 
     private $routes = array();
 
+    public function addRoutes($routes) {
+        foreach ($routes as $route) {
+            $this->addRoute($route);
+        }
+    }
+
     public function addRoute($routeConfig) {
         $prefix = (empty($routeConfig->prefix)) ? false : $routeConfig->prefix;
         $routeConfig = $this->loadRouteConfiguration($routeConfig->file)->getProperties();
@@ -24,9 +30,8 @@ class Router {
     }
 
     protected function loadRouteConfiguration($configFilePath) {
-        $routeConfiguration = new Configuration();
-        $routeConfiguration->setConfigRootDirectory('/');
-        $routeConfiguration->loadFile($configFilePath);
+        $routeConfiguration = $this->container->get('config')->getConfigurationFile($configFilePath);
+
         $this->validateRouteFile($routeConfiguration);
         return $routeConfiguration;
     }

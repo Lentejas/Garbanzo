@@ -1,0 +1,32 @@
+{
+    "pageview": {
+        "pattern": "/:lang/page/:slug",
+        "controller": "Garbanzo\\CMS\\Controller\\MainController",
+        "controller_method": "home",
+        "default": {
+            "lang": "fr"
+        },
+        "requirements": {
+            "lang": "fr|en",
+            "slug": "[a-z0-9-]+"
+        }
+    },
+    "page": {
+        "pattern": "/:lol/page/:foo",
+        "controller": "MainController",
+        "http_method": "GET",
+        "controller_method": "page"
+    },
+    "page1": {
+        "pattern": "/:lol/page/:foo",
+        "controller": "MainController",
+        "http_method": "POST",
+        "controller_method": "page"
+    },
+    "home": {
+        "pattern": "/",
+        "controller": "Garbanzo\\CMS\\Controller\\MainController",
+        "controller_method": "home",
+        "http_method": "GET|POST"
+    }
+}

@@ -10,11 +10,15 @@ use StdClass;
 class PluginLoader {
 
     protected $registeredPlugins;
+    protected $configurationManager;
+    protected $rootPluginConfiguration;
 
-    public function __construct(Configuration $pluginsConfiguration) {
+    public function __construct(ConfigurationManager $configurationManager) {
         $this->registeredPlugins = array();
-        $plugins = $pluginsConfiguration->getProperties();
-        $this->register($plugins);
+        $this->configurationManager = $configurationManager;
+        $pluginsConfiguration = $this->configurationManager->getConfigurationFile('plugins.json')->getProperties();
+        $this->rootPluginConfiguration = $this->configurationManager->setConfigDirectory('/');
+        $this->register($pluginsConfiguration);
     }
 
     public function register($plugins) {
@@ -37,9 +41,7 @@ class PluginLoader {
     }
 
     protected function loadPluginConfiguration($configFilePath) {
-        $pluginConfiguration = new Configuration();
-        $pluginConfiguration->setConfigRootDirectory('/');
-        $pluginConfiguration->loadFile($configFilePath);
+        $pluginConfiguration = $this->rootPluginConfiguration->getConfiguration($configFilePath);
         $this->checkConfiguration($pluginConfiguration, $configFilePath);
         return $pluginConfiguration;
     }

@@ -24,7 +24,7 @@ class HTTPHandler {
 
     }
 
-    public function setResponse() {
+    public function send() {
 
     }
 

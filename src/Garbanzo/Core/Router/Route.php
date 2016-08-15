@@ -18,11 +18,13 @@ class Route {
         $this->controllerClass = $array['class'];
         $this->function = $array['function'];
         $this->params = array();
-        foreach ($array['params'] as $parameterName => $parameterValue) {
-            if (array_key_exists($parameterName, $parameters)) {
-                $this->params[$parameterName] = $parameters[$parameterName];
-            } else if ($parameterValue) {
-                throw new Exception('The parameter: ' . $parameterName . ' is required.');
+        if ($array['params'] !== null) {
+            foreach ($array['params'] as $parameterName => $parameterValue) {
+                if (array_key_exists($parameterName, $parameters)) {
+                    $this->params[$parameterName] = $parameters[$parameterName];
+                } else if ($parameterValue) {
+                    throw new Exception('The parameter: ' . $parameterName . ' is required.');
+                }
             }
         }
     }

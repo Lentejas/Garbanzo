@@ -1,6 +1,6 @@
 {
     "garbanzo-core": {
-        "file": "/src/Garbanzo/Core/config/routes.json",
+        "file": "/config/routes1.json",
         "prefix": "core"
     }
 }

@@ -12,29 +12,23 @@ class App {
 
     private static $environment;
     private $container;
-    private $configuration;
+    private $configurationManager;
 
     public function __construct($environment = self::PROD) {
         self::$environment = $environment;
-        $this->configuration = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
-        $this->configuration->loadFile('plugins.json');
-        $loader = new PluginLoader($this->configuration);
-        $this->container = new Container($loader);
-        $this->container->loadPlugin('core');
+        $this->configurationManager = new ConfigurationManager($_SERVER['DOCUMENT_ROOT'] . '/..');
+        $loader = new PluginLoader($this->configurationManager);
+        $this->container = new Container($loader, new ServiceManager($this->configurationManager));
+        $this->container->loadPlugin('garbanzo-core');
+        $routes = $this->container->get('config')->getConfigurationFile('routes.json')->getProperties();
+        $this->container->get('router')->addRoutes($routes);
     }
 
     public function run() {
-        $request = $this->container->get('garbanzo-core.http')->getRequest();
-        $this->container->get('garbanzo-core.logger')->crudeLog('running');
-        $routes = new Configuration($_SERVER['DOCUMENT_ROOT'] . '/..');
-        $routes->loadFile('routes.json');
-        foreach ($routes->getProperties() as $route) {
-            $this->container->get('garbanzo-core.router')->addRoute($route);
-        }
-        $this->container->loadPlugin('garbanzo-cms');
-        $this->container->loadPlugin('db');
-        //$route = $this->container->get('garbanzo-core.router')->route($request);
-        //var_dump($route);
+        $request = $this->container->get('http')->getRequest();
+        $route = $this->container->get('router')->route($request);
+        $response = $this->container->get('manager.controller')->call($route);
+        $this->container->get('http')->send($response);
     }
 
     public function getConfiguration() {

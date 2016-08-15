@@ -1,0 +1,21 @@
+{
+    "logger": {
+        "class": "Garbanzo\\Core\\Services\\Logger"
+    },
+    "http": {
+        "class": "Garbanzo\\Core\\Services\\Router",
+        "require": "http"
+    },
+    "config": {
+        "class": "Garbanzo\\Core\\Services\\HTTPHandler",
+        "options": {
+            "new_instance": true
+        }
+    },
+    "router": {
+        "class": "Garbanzo\\Core\\Services\\Security"
+    },
+    "security": {
+        "class": "Garbanzo\\Core\\Services\\JsonConfig"
+    }
+}

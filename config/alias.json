@@ -1,0 +1,12 @@
+{
+    "db": "garbanzo-cms.db",
+    "http": "garbanzo-core.http",
+    "router": "garbanzo-core.router",
+    "manager.controller": "garbanzo-core.controller",
+    "manager.service": "garbanzo-core.service",
+    "logger": "garbanzo-core.logger",
+    "theme": "garbanzo-cms.theme",
+    "security": "garbanzo-core.security",
+    "renderer": "garbanzo-cms.renderer",
+    "config": "garbanzo.config"
+}

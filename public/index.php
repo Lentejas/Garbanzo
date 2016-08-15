@@ -8,11 +8,10 @@ if (PHP_SAPI == 'cli-server') {
         return false;
     }
 }
-
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
-
+echo '<pre>';
 $app = new Garbanzo\Kernel\App();
 
 // Run app
