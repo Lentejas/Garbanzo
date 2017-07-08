@@ -41,19 +41,19 @@ class PluginLoader {
     }
 
     protected function loadPluginConfiguration($configFilePath) {
-        $pluginConfiguration = $this->rootPluginConfiguration->getConfiguration($configFilePath);
+        $pluginConfiguration = $this->rootPluginConfiguration->getConfiguration($configFilePath, '');
         $this->checkConfiguration($pluginConfiguration, $configFilePath);
         return $pluginConfiguration;
     }
 
     protected function instantiatePlugin(Configuration $pluginConfiguration) {
         $entryPoint = $pluginConfiguration->get('entry_point');
-        return new $entryPoint($pluginConfiguration->get('name'), $pluginConfiguration->get('configuration'));
+        return new $entryPoint($pluginConfiguration);
     }
 
     protected function checkConfiguration(Configuration $pluginConfiguration, $fileName) {
         if ($pluginConfiguration->get('entry_point') === NULL) {
-            throw new Exception('No entry point was defined in the config file: ' . $filename);
+            throw new Exception('No entry point was defined in the config file: ' . $fileName);
         }
         return true;
     }

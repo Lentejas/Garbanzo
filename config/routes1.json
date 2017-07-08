@@ -27,6 +27,6 @@
         "pattern": "/",
         "controller": "Garbanzo\\CMS\\Controller\\MainController",
         "controller_method": "home",
-        "http_method": "GET|POST"
+        "http_method": "GET|POST|HEAD"
     }
 }

@@ -4,6 +4,7 @@ namespace Garbanzo\Core\Services;
 use Garbanzo\Kernel\Traits\ServiceCreation;
 use Garbanzo\Core\HTTP\Uri;
 use Garbanzo\Core\HTTP\Request;
+use Psr\Http\Message\ResponseInterface;
 
 class HTTPHandler {
 
@@ -24,8 +25,13 @@ class HTTPHandler {
 
     }
 
-    public function send() {
-
+    public function send(ResponseInterface $response) {
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+        echo (string)$response->getBody();
     }
 
     protected function generateUri( $s, $use_forwarded_host = false )

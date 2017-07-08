@@ -22,6 +22,6 @@ class ControllerManager {
         if (! method_exists($controller,  $route->getFunction())) {
             throw new Exception('The controller: ' . $controllerClass . ' does not contain a method called: ' . $route->getFunction());;
         }
-        call_user_func_array(array($controller, $route->getFunction()), $route->getParams());
+        return call_user_func_array(array($controller, $route->getFunction()), $route->getParams());
     }
 }

@@ -19,10 +19,6 @@ class CorePlugin extends Plugin {
     protected $mainConfigFileName;
     protected $namespace;
 
-    public function __construct($name, $mainConfigFileName) {
-        $this->mainConfigFileName = $mainConfigFileName;
-        $this->namespace = $name;
-    }
 
     public function setContainer(ContainerInterface $container) {
         $this->container = $container;

@@ -1,5 +1,6 @@
 {
     "garbanzo-core": "/src/Garbanzo/Core/config.json",
     "garbanzo-cms": "/vendor/lentejas/garbanzo-cms/config/plugin.json",
-    "db": "/vendor/lentejas/garbanzo-cms/config/db.json"
+    "db": "/vendor/lentejas/garbanzo-cms/config/db.json",
+    "theme": "/vendor/lentejas/garbanzo-cms/config/theme.json"
 }

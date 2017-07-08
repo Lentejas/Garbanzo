@@ -7,23 +7,24 @@ use Exception;
 use InvalidArgumentException;
 
 class Container implements ContainerInterface{
-
+    /** @var ServiceManager */
     protected $serviceManager;
     private $loadedPlugins = array();
     private $middlewares = array();
     private $services = array();
+    /** @var  PluginLoader */
     private $loader;
 
-    public function __construct($loader, $serviceManager) {
+    public function __construct(PluginLoader $loader, ServiceManager $serviceManager) {
         $this->setLoader($loader);
         $this->setServiceManager($serviceManager);
     }
 
-    public function setLoader($loader) {
+    public function setLoader(PluginLoader $loader) {
         $this->loader = $loader;
     }
 
-    public function setServiceManager($serviceManager) {
+    public function setServiceManager(ServiceManager $serviceManager) {
         $this->serviceManager = $serviceManager;
     }
 
@@ -56,8 +57,16 @@ class Container implements ContainerInterface{
         if ($service === NULL) {
             $nameParts = explode('.', $this->serviceManager->getName($name));
             $plugin = $this->loadedPlugins[$nameParts[0]];
+
             $service = $this->serviceManager->instatiateService($name, $plugin);
             $service->setContainer($this);
+
+//            $this->services[$name]['object'] = new $this->services[$name]['class']();
+//            $this->services[$name]['object']->setPlugin($plugin);
+//            $this->services[$name]['object']->setContainer($this);
+//        } else if (is_callable($this->services[$name]['object'])) {
+//            return $this->services[$name]['object']();
+
         }
         return $service;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Garbanzo\Kernel;
 
+use Garbanzo\Kernel\Definition\Plugin;
 use InvalidArgumentException;
 use Exception;
 
@@ -50,6 +51,9 @@ class ServiceManager {
 
     public function instatiateService($name, $plugin) {
         $name = $this->getName($name);
+        if (isset($this->services[$name]['object'])) {
+            return $this->services[$name]['object'];
+        }
         $this->services[$name]['object'] = new $this->services[$name]['class']();
         $this->services[$name]['object']->setPlugin($plugin);
         return $this->services[$name]['object'];
@@ -60,7 +64,7 @@ class ServiceManager {
         return $this->services;
     }
 
-    public function registerFromPlugin($plugin) {
+    public function registerFromPlugin(Plugin $plugin) {
         $services = $plugin->getDefinedServices();
         $namespace = $plugin->getServicesNamespace();
         $this->register($services, $namespace);
@@ -76,18 +80,18 @@ class ServiceManager {
     }
 
     public function registerOne($serviceName, $service, $namespace = '') {
-        if (! is_string($serviceName)) {
-            throw new InvalidArgumentException;
-        } else if (array_key_exists($serviceName, $this->services)) {
-            throw new Exception('The service ' . $serviceName . 'is already registered');
-        } else if (is_object($service)) {
+        if (is_object($service)) {
             $this->services[$namespace . '.' . $serviceName] = array(
 
                 'object' => $service,
                 'class' => get_class($service),
             );
             return;
-        } else if (! class_exists($service)) {
+        }  elseif (! is_string($serviceName)) {
+            throw new InvalidArgumentException;
+        } else if (array_key_exists($serviceName, $this->services)) {
+            throw new Exception('The service ' . $serviceName . 'is already registered');
+        } elseif (! class_exists($service)) {
             throw new InvalidArgumentException('The provided class (' . $service . ') does not exist');
         }
         $this->services[$namespace . '.' . $serviceName] = array(

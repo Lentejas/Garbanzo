@@ -9,23 +9,25 @@ use StdClass;
 class Configuration {
 
     private $properties;
+    /** @var ConfigurationManager  */
     protected $manager;
     protected $basePath;
     protected $fileName;
 
-    public function __construct($manager, $basePath, $filename = null) {
+    public function __construct(ConfigurationManager $manager, $basePath, $filename = null) {
         $this->manager = $manager;
         $this->basePath = $basePath;
-        $this->filename = $filename;
+        $this->fileName = $filename;
     }
 
-    public function getConfiguration($fileName, $basePath =null) {
-        if ($this->filename  === null || ($this->filename != $filename 
-            || ($this->basePath != $basePath && $basePath !== null))) {
-            $this->properties = $this->manager->getConfigurationData($basePath, $fileName);
-            $this->filename = $fileName;
+    public function getConfiguration(string $fileName, string $basePath = ConfigurationManager::DEFAULT_CONFIG_DIRECTORY) {
+        if ($this->fileName  === null || ($this->fileName != $fileName)
+            || ($this->basePath != $basePath && $basePath !== null)) {
+
+            $this->properties = $this->manager->getConfigurationData($fileName, $basePath);
+            $this->fileName = $fileName;
         } else {
-            return $this->manager->getConfigurationFile($basePath, $fileName);
+            return $this->manager->getConfigurationFile($fileName, $basePath);
         }
         return $this;
     }

@@ -113,7 +113,7 @@ class Router {
             }
         }
         if ($matched === null) {
-            throw new Exception('No route matching');
+            throw new Exception(sprintf('No route matching %s', $path));
         }
         return $matched;
     }
